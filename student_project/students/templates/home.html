@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Record Manager</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'students/style.css' %}" />
+</head>
+
+<body>
+  <div class="page-shell">
+    <header class="header">
+      <div class="header-title">
+        <h1>Student Record Manager</h1>
+        <p>Keep your student list clean, minimal, and easy to manage. Add students quickly, then remove them with a single click.</p>
+      </div>
+      <div class="card form-card">
+        <form method="POST" class="form-grid" id="student-form">
+          {% csrf_token %}
+          <div class="input-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter student name" required />
+          </div>
+
+          <div class="input-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" name="age" placeholder="18" min="1" required />
+          </div>
+
+          <div class="input-group">
+            <label for="course">Course</label>
+            <input type="text" id="course" name="course" placeholder="Full Stack Developer" required />
+          </div>
+
+          <button class="primary" type="submit">Add Student</button>
+        </form>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="header-title">
+        <h2>Students</h2>
+        <p>Review and manage student records in a simple, elegant list.</p>
+      </div>
+
+      {% if students %}
+      <div class="students-panel">
+        {% for student in students %}
+        <div class="student-row">
+          <div class="student-info">
+            <div class="student-name">{{ student.name }}</div>
+            <div class="student-meta">
+              <span>Age: {{ student.age }}</span>
+              <span>Course: {{ student.course }}</span>
+            </div>
+          </div>
+          <a class="delete-link" href="/delete/{{ student.id }}" onclick="return confirm('Delete this student?');">Delete</a>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="no-students">No students have been added yet. Start by filling in the form above.</div>
+      {% endif %}
+    </section>
+  </div>
+</body>
+
+</html>
